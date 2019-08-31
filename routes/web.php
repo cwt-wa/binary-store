@@ -3,25 +3,31 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 
-class UserMatchingCallback
+class FileFilterByIdCallback
 {
-    private $userId;
+    private $fileId;
 
-    public function __construct($userId)
+    public function __construct($fileId)
     {
-        $this->userId = $userId;
+        $this->fileId = $fileId;
     }
 
     public function __invoke($it)
     {
-        return $it->getBasename('.' . $it->getExtension()) === $this->userId;
+        return $it->getBasename('.' . $it->getExtension()) === $this->fileId;
     }
 };
 
 function findMatchingUserPics($userId) {
     return array_filter(
             File::files("../binary/photo/"),
-            new UserMatchingCallback($userId));
+            new FileFilterByIdCallback($userId));
+}
+
+function findMatchingGameReplays($gameId) {
+    return array_filter(
+            File::files("../binary/replay/"),
+            new FileFilterByIdCallback($gameId));
 }
 
 $router->get('/', function () use ($router) {
@@ -50,6 +56,29 @@ $router->group(['prefix' => 'api'], function () use ($router) {
         $uploadedFile->move(
             '../binary/photo',
             "$userId." . $uploadedFile->extension());
+    });
+
+    $router->get('replay', function () {
+        return response()->download("../binary/replays_2007_till_2011.zip");
+    });
+
+    $router->get('game/{gameId}/replay', function ($gameId) {
+        $files = findMatchingGameReplays($gameId);
+        if (empty($files)) {
+            return response()->download("../binary/replays_2007_till_2011.zip");
+        }
+        return response()->download("../binary/replay/" . $files[0]->getFilename());
+    });
+
+    $router->post('game/{id}/replay', function (Request $request, $gameId) {
+        $currFiles = array_map(function ($it) {
+            return $it->getPathname();
+        }, findMatchingGameReplays($gameId));
+        File::delete($currFiles);
+        $uploadedFile = $request->file('replay');
+        $uploadedFile->move(
+            '../binary/replay',
+            "$gameId." . $uploadedFile->extension());
     });
 });
 
