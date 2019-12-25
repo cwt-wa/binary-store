@@ -6,6 +6,10 @@ PHP Version 7.1.31-he.0
 
 ## Usage
 
+```
+php -S localhost:8000 -t public
+```
+
 ### `photo`
 
 | Method | Endpoint |
