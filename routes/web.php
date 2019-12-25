@@ -58,6 +58,13 @@ $router->group(['prefix' => 'api'], function () use ($router) {
             "$userId." . $uploadedFile->extension());
     });
 
+    $router->delete('user/{id}/photo', function (Request $request, $userId) {
+        $currFiles = array_map(function ($it) {
+            return $it->getPathname();
+        }, findMatchingUserPics($userId));
+        File::delete($currFiles);
+    });
+
     $router->get('replay', function () {
         return response()->download("../binary/replays_2007_till_2011.zip");
     });
