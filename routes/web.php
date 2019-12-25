@@ -44,7 +44,7 @@ $router->group(['prefix' => 'api'], function () use ($router) {
             Log::debug($rndFiles[$rnd]->getPathname());
             return response()->download($rndFiles[$rnd]->getPathname());
         }
-        return response()->download("../binary/photo/" . $files[0]->getFilename());
+        return response()->download("../binary/photo/" . array_values($files)[0]->getFilename());
     });
 
     $router->post('user/{id}/photo', function (Request $request, $userId) {
@@ -74,7 +74,7 @@ $router->group(['prefix' => 'api'], function () use ($router) {
         if (empty($files)) {
             return response()->download("../binary/replays_2007_till_2011.zip");
         }
-        return response()->download("../binary/replay/" . $files[0]->getFilename());
+        return response()->download("../binary/replay/" . array_values($files)[0]->getFilename());
     });
 
     $router->post('game/{id}/replay', function (Request $request, $gameId) {
