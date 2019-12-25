@@ -39,10 +39,7 @@ $router->group(['prefix' => 'api'], function () use ($router) {
     $router->get('user/{userId}/photo', function ($userId) {
         $files = findMatchingUserPics($userId);
         if (empty($files)) {
-            $rndFiles = File::files("./albino");
-            $rnd = rand(0, count($rndFiles) - 1);
-            Log::debug($rndFiles[$rnd]->getPathname());
-            return response()->download($rndFiles[$rnd]->getPathname());
+            return abort(404);
         }
         return response()->download("../binary/photo/" . array_values($files)[0]->getFilename());
     });
