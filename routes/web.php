@@ -49,9 +49,7 @@ $router->group(['prefix' => 'api'], function () use ($router) {
         if (empty($files)) {
             return abort(404);
         }
-        return response()
-            ->download("../binary/photo/" . array_values($files)[0]->getFilename())
-            ->setCache(['public' => true, 'max_age' => 604800, "immutable" => true]);
+        return response()->download("../binary/photo/" . array_values($files)[0]->getFilename());
     });
 
     $router->post('user/{id}/photo', function (Request $request, $userId) {
