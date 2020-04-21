@@ -20,14 +20,22 @@ class FileFilterByIdCallback
 
 function findMatchingUserPics($userId) {
     return array_filter(
-            File::files("../binary/photo/"),
-            new FileFilterByIdCallback($userId));
+        File::files("../binary/photo/"),
+        new FileFilterByIdCallback($userId));
 }
 
-function findMatchingGameReplays($gameId) {
+function findMatchingGameReplays($gameId)
+{
     return array_filter(
-            File::files("../binary/replay/"),
-            new FileFilterByIdCallback($gameId));
+        File::files("../binary/replay/"),
+        new FileFilterByIdCallback($gameId));
+}
+
+function findMatchingGameMap($gameId, $map)
+{
+    return array_filter(
+        File::files("../binary/map/" . $gameId),
+        new FileFilterByIdCallback($map));
 }
 
 $router->get('/', function () use ($router) {
@@ -83,6 +91,18 @@ $router->group(['prefix' => 'api'], function () use ($router) {
         $uploadedFile->move(
             '../binary/replay',
             "$gameId." . $uploadedFile->extension());
+    });
+
+    $router->get('game/{gameId}/map/{map}', function ($gameId, $map) {
+        $files = findMatchingGameMap($gameId, $map);
+        return response()->download("../binary/map/${gameId}/" . array_values($files)[0]->getFilename())
+    });
+
+    $router->post('game/{gameId}/map/{map}', function (Request $request, $gameId, $map) {
+        $uploadedFile = $request->file('map');
+        $uploadedFile->move(
+            '../binary/map/' . $gameId,
+            "$map.png");
     });
 });
 

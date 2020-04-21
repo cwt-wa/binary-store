@@ -24,3 +24,10 @@ php -S localhost:8000 -t public
 | POST | /api/game/{gameId}/replay |
 | GET  | /api/game/{gameId}/replay |
 
+### `map`
+
+| Method | Endpoint |
+| --- | --- |
+| POST | /api/game/{gameId}/map/{round} |
+| GET  | /api/game/{gameId}/map/{round} |
+
