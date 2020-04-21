@@ -101,8 +101,12 @@ $router->group(['prefix' => 'api'], function () use ($router) {
 
     $router->get('game/{gameId}/map/{map}', function ($gameId, $map) {
         $files = findMatchingGameMap($gameId, $map);
+        $filename = array_values($files)[0]->getFilename();
         return response()
-            ->download("../binary/map/${gameId}/" . array_values($files)[0]->getFilename())
+            ->download(
+                "../binary/map/${gameId}/" . $filename,
+                $filename,
+                ["Content-Type" => "image/png"])
             ->setCache(['public' => true, 'max_age' => 604800, "immutable" => true]);
     });
 
