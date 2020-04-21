@@ -49,7 +49,9 @@ $router->group(['prefix' => 'api'], function () use ($router) {
         if (empty($files)) {
             return abort(404);
         }
-        return response()->download("../binary/photo/" . array_values($files)[0]->getFilename());
+        return response()
+            ->download("../binary/photo/" . array_values($files)[0]->getFilename())
+            ->setCache(['public' => true, 'max_age' => 604800, "immutable" => true]);
     });
 
     $router->post('user/{id}/photo', function (Request $request, $userId) {
@@ -71,15 +73,21 @@ $router->group(['prefix' => 'api'], function () use ($router) {
     });
 
     $router->get('replay', function () {
-        return response()->download("../binary/replays_2007_till_2011.zip");
+        return response()
+            ->download("../binary/replays_2007_till_2011.zip")
+            ->setCache(['public' => true, 'max_age' => 604800, "immutable" => true]);
     });
 
     $router->get('game/{gameId}/replay', function ($gameId) {
         $files = findMatchingGameReplays($gameId);
         if (empty($files)) {
-            return response()->download("../binary/replays_2007_till_2011.zip");
+            return response()
+                ->download("../binary/replays_2007_till_2011.zip")
+                ->setCache(['public' => true, 'max_age' => 604800, "immutable" => true]);
         }
-        return response()->download("../binary/replay/" . array_values($files)[0]->getFilename());
+        return response()
+            ->download("../binary/replay/" . array_values($files)[0]->getFilename())
+            ->setCache(['public' => true, 'max_age' => 604800, "immutable" => true]);
     });
 
     $router->post('game/{id}/replay', function (Request $request, $gameId) {
@@ -95,7 +103,9 @@ $router->group(['prefix' => 'api'], function () use ($router) {
 
     $router->get('game/{gameId}/map/{map}', function ($gameId, $map) {
         $files = findMatchingGameMap($gameId, $map);
-        return response()->download("../binary/map/${gameId}/" . array_values($files)[0]->getFilename())
+        return response()
+            ->download("../binary/map/${gameId}/" . array_values($files)[0]->getFilename())
+            ->setCache(['public' => true, 'max_age' => 604800, "immutable" => true]);
     });
 
     $router->post('game/{gameId}/map/{map}', function (Request $request, $gameId, $map) {
