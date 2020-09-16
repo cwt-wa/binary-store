@@ -52,7 +52,7 @@ $router->group(['prefix' => 'api'], function () use ($router) {
         return response()->download("../binary/photo/" . array_values($files)[0]->getFilename());
     });
 
-    $router->post('user/{id}/photo', function (Request $request, $userId) {
+    $router->post('user/{userId}/photo', function (Request $request, $userId) {
         $currFiles = array_map(function ($it) {
             return $it->getPathname();
         }, findMatchingUserPics($userId));
@@ -63,7 +63,7 @@ $router->group(['prefix' => 'api'], function () use ($router) {
             "$userId." . $uploadedFile->extension());
     });
 
-    $router->delete('user/{id}/photo', function (Request $request, $userId) {
+    $router->delete('user/{userId}/photo', function (Request $request, $userId) {
         $currFiles = array_map(function ($it) {
             return $it->getPathname();
         }, findMatchingUserPics($userId));
@@ -88,7 +88,7 @@ $router->group(['prefix' => 'api'], function () use ($router) {
             ->setCache(['public' => true, 'max_age' => 604800, "immutable" => true]);
     });
 
-    $router->post('game/{id}/replay', function (Request $request, $gameId) {
+    $router->post('game/{gameId}/replay', function (Request $request, $gameId) {
         $currFiles = array_map(function ($it) {
             return $it->getPathname();
         }, findMatchingGameReplays($gameId));
