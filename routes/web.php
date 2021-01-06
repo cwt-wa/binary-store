@@ -5,8 +5,6 @@ use Illuminate\Support\Facades\File;
 
 class FileFilterByIdCallback
 {
-    private $fileId;
-
     public function __construct($fileId)
     {
         $this->fileId = $fileId;
@@ -70,19 +68,9 @@ $router->group(['prefix' => 'api'], function () use ($router) {
         File::delete($currFiles);
     });
 
-    $router->get('replay', function () {
-        return response()
-            ->download("../binary/replays_2007_till_2011.zip")
-            ->setCache(['public' => true, 'max_age' => 604800, "immutable" => true]);
-    });
-
     $router->get('game/{gameId}/replay', function ($gameId) {
         $files = findMatchingGameReplays($gameId);
-        if (empty($files)) {
-            return response()
-                ->download("../binary/replays_2007_till_2011.zip")
-                ->setCache(['public' => true, 'max_age' => 604800, "immutable" => true]);
-        }
+        if (empty($files)) abort(404, '404');
         return response()
             ->download("../binary/replay/" . array_values($files)[0]->getFilename())
             ->setCache(['public' => true, 'max_age' => 604800, "immutable" => true]);
