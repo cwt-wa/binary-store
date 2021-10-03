@@ -77,7 +77,7 @@ $router->group(['prefix' => 'api'], function () use ($router) {
     });
 
     $router->post('game/{gameId}/replay', function (Request $request, $gameId) {
-	if ($request->header('third-party-token') !== env('CWT_THIRD_PARTY_TOKEN')) abort(403, 'forbidden');
+        if ($request->header('third-party-token') !== env('CWT_THIRD_PARTY_TOKEN')) abort(403, 'forbidden');
         $currFiles = array_map(function ($it) {
             return $it->getPathname();
         }, findMatchingGameReplays($gameId));
