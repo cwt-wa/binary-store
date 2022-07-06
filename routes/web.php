@@ -51,6 +51,7 @@ $router->group(['prefix' => 'api'], function () use ($router) {
     });
 
     $router->post('user/{userId}/photo', function (Request $request, $userId) {
+        if ($request->header('third-party-token') !== env('CWT_THIRD_PARTY_TOKEN')) abort(403, 'forbidden');
         $currFiles = array_map(function ($it) {
             return $it->getPathname();
         }, findMatchingUserPics($userId));
@@ -62,6 +63,7 @@ $router->group(['prefix' => 'api'], function () use ($router) {
     });
 
     $router->delete('user/{userId}/photo', function (Request $request, $userId) {
+        if ($request->header('third-party-token') !== env('CWT_THIRD_PARTY_TOKEN')) abort(403, 'forbidden');
         $currFiles = array_map(function ($it) {
             return $it->getPathname();
         }, findMatchingUserPics($userId));
@@ -100,6 +102,7 @@ $router->group(['prefix' => 'api'], function () use ($router) {
     });
 
     $router->post('game/{gameId}/map/{map}', function (Request $request, $gameId, $map) {
+        if ($request->header('third-party-token') !== env('CWT_THIRD_PARTY_TOKEN')) abort(403, 'forbidden');
         $uploadedFile = $request->file('map');
         $uploadedFile->move(
             '../binary/map/' . $gameId,
