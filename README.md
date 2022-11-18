@@ -2,7 +2,7 @@
 
 A filesystem datastore interface for storing binaries of CWT.
 
-PHP Version 7.1.31-he.0
+PHP Version 8.1
 
 ## Usage
 
